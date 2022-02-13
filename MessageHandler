@@ -2,25 +2,72 @@ response = Map();
 msg = message.get("text");
 if(operation.equals("chat"))
 {
-	if(!msg.equalsIgnoreCase("I would like to schedule") && !msg.equalsIgnoreCase("No, Thanks!"))
+	if(!msg.equalsIgnoreCase("Schedule an appointment") && !msg.equalsIgnoreCase("Doctors Info") && !msg.equalsIgnoreCase("Working hours") && !msg.equalsIgnoreCase("Contact Details") && !msg.equalsIgnoreCase("Cancel an appointment") && !msg.equalsIgnoreCase("Reschedule my appointment") && !msg.equalsIgnoreCase("Thanks. I'm ok for now"))
+	{
+		response.put("action","reply");
+		response.put("replies",{"Hey there! DoC Bot here. Welcome to Health Care ENT Centre."," What Can I do for you?"});
+		response.put("input",{"type":"select","options":{"Schedule an appointment","Doctors Info","Working hours","Reschedule my appointment","Contact Details","Thanks. I'm ok for now"}});
+		return response;
+	}
+}
+if(!msg.isNull())
+{
+	if(msg.equalsIgnoreCase("Schedule an appointment"))
+	{
+		response.put("action","context");
+		response.put("context_id","schedule");
+		question = {"name":"name","replies":{"I just need a few more details from you to make that happen.","What is your name?"},"input":{"type":"name","placeholder":"Enter your name","error":{"Please, enter a valid name"}}};
+		response.put("questions",{question});
+	}
+	else if(msg.equalsIgnoreCase("Doctors Info"))
+	{
+		response.put("action","context");
+		response.put("context_id","appointment");
+		slt = {"type":"select","options":{"Yes","No"}};
+		question = {"name":"names","replies":{"Dr.Neil Jackson - Dean","Dr.Nate Baston - Ear Specialist","Dr.Jason Stewart - ENT physician","Dr.Miasha Nakahara - Nose Specialist","Now, do you wish to schedule an appointment?"},"input":slt};
+		response.put("questions",{question});
+	}
+	else if(msg.equalsIgnoreCase("Working hours"))
+	{
+		response.put("action","context");
+		response.put("context_id","appointment");
+		slt = {"type":"select","options":{"Yes","No"}};
+		question = {"name":"names","replies":{"Monday - Friday: 10:00 AM - 9:00 PM","Saturday - Sunday: 10:00 AM - 06:00 PM","Now, do you wish to schedule an appointment?"},"input":slt};
+		response.put("questions",{question});
+	}
+	else if(msg.equalsIgnoreCase("Contact Details"))
+	{
+		response.put("action","context");
+		response.put("context_id","appointment");
+		slt = {"type":"select","options":{"Yes","No"}};
+		question = {"name":"names","replies":{"Email ID: entcare@company.com","Phone No: +91 8778701330","Now, do you wish to schedule an appointment?"},"input":slt};
+		response.put("questions",{question});
+	}
+	else if(msg.equalsIgnoreCase("Cancel an appointment"))
 	{
 		response.put("action","context");
 		response.put("context_id","cancel");
-		question = {"name":"name","replies":{"Sorry to hear that! I just need a few details to cancel your appointment","What is your Booking Id"," A Booking Id looks like this #EN-00002"}};
+		question = {"name":"name","replies":{"Sorry to hear that! I just need a few details to cancel your appointment","What is your Booking Id","Sample Booking Id #EN-00002"},"input":{"type":"name","placeholder":"Enter your Booking ID","error":{"Please, enter a valid Booking ID"}}};
 		response.put("questions",{question});
 	}
-	else if(msg.equalsIgnoreCase("No, Thanks!"))
+	else if(msg.equalsIgnoreCase("Reschedule my appointment"))
 	{
 		response.put("action","context");
-		response.put("context_id","nothing");
-		question = {"name":"end","replies":{"Don't worry","Do check out my website for any help"}};
+		response.put("context_id","reschedule");
+		question = {"name":"bk_id","replies":{"Please, Enter your Booking ID to Reschedule your appointment","Sample Booking Id #EN-00002"},"input":{"type":"name","placeholder":"Enter your Booking ID","error":{"Please, enter a valid Booking ID"}}};
 		response.put("questions",{question});
+	}
+	else if(msg.equalsIgnoreCase("Thanks. I'm ok for now"))
+	{
+		response.put("action","end");
+		response.put("replies",{"Don't worry","Do check out this website for any help"});
+		return response;
 	}
 	else
 	{
 		response.put("action","reply");
-		response.put("replies",{"Would you like to learn more about how we can help you grow your business?","We will be happy to schedule a call"});
-		response.put("suggestions",{"I would like to schedule","No, Thanks!"});
+		response.put("replies",{"Hey there! DoC Bot here. Welcome to Health Care ENT Centre."," What Can I do for you?"});
+		response.put("input",{"type":"select","options":{"Schedule an appointment","Doctors Info","Cancel an appointment","Working hours","Reschedule an appointment","Contact Details","Thanks. I'm ok for now"}});
 	}
 }
 return response;
